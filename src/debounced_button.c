@@ -43,39 +43,45 @@
 #include <assert.h>
 
 //
-// Section: Data Types
-//
-
-//
-// Section: Constants
-//
-
-//
-// Section: Global Variable Declarations
-//
-
-//
-// Section: Macros
-//
-
-//
-// Section: Static Function Prototypes
-//
-
-//
-// Section: Static Function Definitions
-//
-
-//
 // Section: Debounced Button API
 //
 
 BUTTON_STATE_T BUTTON_Debounce(uint8_t reading, BUTTON_T *button) {
-    return BUTTON_ERROR;
+    reading = reading ? 1U : 0U;
+    button->debounce <<= 1U;
+    button->debounce |= reading;
+    switch (button->state) {
+        case BUTTON_LOW:
+            if (0xFFU == button->debounce) {
+                button->state = BUTTON_HIGH;
+            }
+            break;
+        case BUTTON_HIGH:
+            if (0x00U == button->debounce) {
+                button->state = BUTTON_LOW;
+            }
+            break;
+        case BUTTON_INITIALIZED:
+            switch (button->debounce) {
+                case 0x00U:
+                    button->state = BUTTON_LOW;
+                    break;
+                case 0xFFU:
+                    button->state = BUTTON_HIGH;
+                    break;
+                default:
+                    break;
+            }
+            break;
+        default:
+            button->state = BUTTON_ERROR;
+            break;
+    }
+    return button->state;
 }
 
 void BUTTON_Initialize(BUTTON_T *button) {
-    button->debounce = 0x55;
+    button->debounce = 0x55U;
     button->state = BUTTON_INITIALIZED;
 }
 
