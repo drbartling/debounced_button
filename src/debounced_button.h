@@ -33,21 +33,21 @@
  ******************************************************************************/
 
 #ifndef DEBOUNCED_BUTTON_H    // Guards against multiple inclusion
-#define DEBOUNCED_BUTTON_H
+#    define DEBOUNCED_BUTTON_H
 
 //
 // Section: Included Files
 //
 
-#include <stdbool.h>
-#include <stdint.h>
+#    include <stdbool.h>
+#    include <stdint.h>
 
 //
 // Section: Data Types
 //
 
 /**
- * Enumerated button states.
+ * Button press states.
  */
 typedef enum {
     BUTTON_LOW = 0,
@@ -57,11 +57,21 @@ typedef enum {
 } BUTTON_STATE_T;
 
 /**
+ * Edge detection states
+ */
+typedef enum {
+    EDGE_FALLING, ///< Button state has transitioned from high to low
+    EDGE_NONE, ///< Button state did not change during last call to Debounce()
+    EDGE_RISING, ///< Button state transitioned from low to high
+} BUTTON_EDGE_T;
+
+/**
  * Structure for button object used by API functions.
  */
 typedef struct {
     uint8_t debounce;
     BUTTON_STATE_T state;
+    BUTTON_EDGE_T edge;
 } BUTTON_T;
 
 //

@@ -54,11 +54,17 @@ BUTTON_STATE_T BUTTON_Debounce(uint8_t reading, BUTTON_T *button) {
         case BUTTON_LOW:
             if (0xFFU == button->debounce) {
                 button->state = BUTTON_HIGH;
+                button->edge = EDGE_RISING;
+            } else {
+                button->edge = EDGE_NONE;
             }
             break;
         case BUTTON_HIGH:
             if (0x00U == button->debounce) {
                 button->state = BUTTON_LOW;
+                button->edge = EDGE_FALLING;
+            } else {
+                button->edge = EDGE_NONE;
             }
             break;
         case BUTTON_INITIALIZED:
@@ -83,6 +89,7 @@ BUTTON_STATE_T BUTTON_Debounce(uint8_t reading, BUTTON_T *button) {
 void BUTTON_Initialize(BUTTON_T *button) {
     button->debounce = 0x55U;
     button->state = BUTTON_INITIALIZED;
+    button->edge = EDGE_NONE;
 }
 
 //
