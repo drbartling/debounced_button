@@ -125,6 +125,26 @@ void test_Edge_should_beNone_when_stateRemainsHigh(void) {
             "edge should be \"None\"");
 }
 
+void test_Edge_should_matchTheButtonStateValue_when_theStateChanges(void) {
+    TEST_ASSERT_EQUAL(BUTTON_LOW, EDGE_FALLING);
+    TEST_ASSERT_EQUAL(BUTTON_HIGH, EDGE_RISING);
+
+    // This allows the user to use the same defines for state and edge checking
+    // Example code not relevent to the test:
+    if (IO_PRESSED == testButton.state) {
+        // Do stuff when ever the button is held.
+    }
+    if (IO_PRESSED == testButton.edge) {
+        // Do stuff only when the button is first pressed.
+    }
+    if (IO_RELEASED == testButton.state) {
+        // Do stuff when ever the button is not pressed.
+    }
+    if (IO_RELEASED == testButton.edge) {
+        // Do stuff only when the button is let go of.
+    }
+}
+
 int main(void) {
     UNITY_BEGIN();
     RUN_TEST(test_Initialize_should_MakeButtonNotPressed);
@@ -138,5 +158,6 @@ int main(void) {
     RUN_TEST(test_Edge_should_beFalling_when_stateChangesFromHighToLow);
     RUN_TEST(test_Edge_should_beNone_when_stateRemainsLow);
     RUN_TEST(test_Edge_should_beNone_when_stateRemainsHigh);
+    RUN_TEST(test_Edge_should_matchTheButtonStateValue_when_theStateChanges);
     return UNITY_END();
 }
