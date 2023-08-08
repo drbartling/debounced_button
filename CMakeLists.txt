@@ -14,15 +14,11 @@ endif()
 
 include(cmake/CPM.cmake)
 
-# if(${PROJECT_NAME}_ENABLE_TESTING)
-#     if(NOT TARGET Catch)
-#         cpmaddpackage("gh:catchorg/Catch2@3.3.2")
-#     endif()
-# endif()
-
-# if(NOT TARGET c_static_asserts)
-#     cpmaddpackage("gh:drbartling/c_static_asserts#master")
-# endif()
+if(${PROJECT_NAME}_ENABLE_TESTING)
+    if(NOT TARGET Catch)
+        cpmaddpackage("gh:catchorg/Catch2@3.3.2")
+    endif()
+endif()
 
 # ---- Create binary ----
 
