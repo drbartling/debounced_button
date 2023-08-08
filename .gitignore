@@ -85,3 +85,5 @@ test_button_nb
 test_button.X
 
 build/
+*-build-*/
+.idea/
