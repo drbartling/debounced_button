@@ -20,8 +20,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ *all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -32,25 +32,21 @@
  * SOFTWARE.
  ******************************************************************************/
 
-#ifndef DEBOUNCED_BUTTON_H    // Guards against multiple inclusion
-#    define DEBOUNCED_BUTTON_H
+#ifndef DEBOUNCED_BUTTON_H
+#define DEBOUNCED_BUTTON_H
 
-//
-// Section: Included Files
-//
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-#    include <stdbool.h>
-#    include <stdint.h>
-
-//
-// Section: Data Types
-//
+#include <stdbool.h>
+#include <stdint.h>
 
 /**
  * Button press states.
  */
 typedef enum {
-    BUTTON_LOW = 0,
+    BUTTON_LOW  = 0,
     BUTTON_HIGH = 1,
     BUTTON_INITIALIZED,
     BUTTON_ERROR,
@@ -61,7 +57,7 @@ typedef enum {
  */
 typedef enum {
     EDGE_FALLING = 0, ///< Button state has transitioned from high to low
-    EDGE_RISING = 1, ///< Button state transitioned from low to high
+    EDGE_RISING  = 1, ///< Button state transitioned from low to high
     EDGE_NONE, ///< Button state did not change during last call to Debounce()
 } BUTTON_EDGE_T;
 
@@ -69,14 +65,10 @@ typedef enum {
  * Structure for button object used by API functions.
  */
 typedef struct {
-    uint8_t debounce;
+    uint8_t        debounce;
     BUTTON_STATE_T state;
-    BUTTON_EDGE_T edge;
+    BUTTON_EDGE_T  edge;
 } BUTTON_T;
-
-//
-// Section: Debounced Button API
-//
 
 /**
  * Function takes a button (I/O) reading and debounces it.
@@ -93,9 +85,7 @@ BUTTON_STATE_T BUTTON_Debounce(uint8_t reading, BUTTON_T *button);
  */
 void BUTTON_Initialize(BUTTON_T *button);
 
-#endif // FILE_NAME_H
-
-//
-// End of File
-//
-
+#ifdef __cplusplus
+}
+#endif
+#endif // DEBOUNCED_BUTTON_H

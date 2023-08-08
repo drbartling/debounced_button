@@ -43,6 +43,6 @@ repos:
     description: Run unit tests.
     entry: make test
     language: system
-    types: [c]
+    types: [c, c++]
     pass_filenames: false
     stages: [commit]
