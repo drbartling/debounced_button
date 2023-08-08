@@ -27,12 +27,23 @@ target_include_directories(${PROJECT_NAME} PUBLIC src)
 # target_link_libraries(${PROJECT_NAME} PUBLIC c_static_asserts)
 
 if(${PROJECT_NAME}_ENABLE_TESTING)
-    add_executable(
-        ${PROJECT_NAME}_tests test/test_debounced_button.c unity/unity.c
+    add_executable(${PROJECT_NAME}_tests test/test_debounced_button.cpp)
+    target_link_libraries(
+        ${PROJECT_NAME}_tests Catch2::Catch2WithMain ${PROJECT_NAME}
     )
-    target_include_directories(${PROJECT_NAME}_tests PRIVATE unity test)
-    target_link_libraries(${PROJECT_NAME}_tests ${PROJECT_NAME})
+    target_compile_features(${PROJECT_NAME}_tests PRIVATE cxx_std_17)
+    target_compile_options(
+        ${PROJECT_NAME}_tests
+        PRIVATE "-g"
+                "-gdwarf-4"
+                "-Wno-c99-designator"
+                "-Wno-extern-c-compat"
+    )
 
+    # ---- Enable testing ----
+
+    list(APPEND CMAKE_MODULE_PATH ${Catch2_SOURCE_DIR}/extras)
     include(CTest)
-    add_test(NAME ${PROJECT_NAME}_tests COMMAND ${PROJECT_NAME}_tests)
+    include(Catch)
+    catch_discover_tests(${PROJECT_NAME}_tests)
 endif()
