@@ -83,3 +83,5 @@ $RECYCLE.BIN/
 *.lnk
 test_button_nb
 test_button.X
+
+build/

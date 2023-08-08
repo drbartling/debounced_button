@@ -1,68 +1,13 @@
-#We try to detect the OS we are running on, and adjust commands as needed
-ifeq ($(OSTYPE),cygwin)
-	CLEANUP = rm -f
-	MKDIR = mkdir -p
-	TARGET_EXTENSION=.out
-else ifeq ($(OS),Windows_NT)
-	CLEANUP = del /F /Q
-	MKDIR = mkdir
-	TARGET_EXTENSION=.exe
-else
-	CLEANUP = rm -f
-	MKDIR = mkdir -p
-	TARGET_EXTENSION=.out
-endif
+.PHONY: default
+default: build
+	cmake --build build
 
-#Path Definitions
-PATHU = unity/
-PATHS = src/
-PATHT = test/
-PATHB = build/
+build:
+	cmake -S . -B build -G Ninja
 
-#determine our source files
-SRCU = $(PATHU)unity.c
-SRCS = $(wildcard $(PATHS)*.c)
-SRCT = $(wildcard $(PATHT)*.c)
-SRC = $(SRCU) $(SRCS) $(SRCT)
-
-#Files We Are To Work With
-OBJU = $(patsubst $(PATHU)%.c,$(PATHB)%.o,$(SRCU))
-OBJS = $(patsubst $(PATHS)%.c,$(PATHB)%.o,$(SRCS))
-OBJT = $(patsubst $(PATHT)%.c,$(PATHB)%.o,$(SRCT))
-OBJ = $(OBJU) $(OBJS) $(OBJT)
-
-#Other files we care about
-DEP = $(PATHU)unity.h $(PATHU)unity_internals.h
-TGT = $(PATHB)test$(TARGET_EXTENSION)
-
-#Tool Definitions
-CC=gcc
-CFLAGS=-I. -I$(PATHU) -I$(PATHS) -DTEST
-
-test: $(PATHB) $(TGT)
-	./$(TGT)
-
-$(PATHB)%.o:: $(PATHS)%.c $(DEP)
-	$(CC) -c $(CFLAGS) $< -o $@
-
-$(PATHB)%.o:: $(PATHT)%.c $(DEP)
-	$(CC) -c $(CFLAGS) $< -o $@
-
-$(PATHB)%.o:: $(PATHU)%.c $(DEP)
-	$(CC) -c $(CFLAGS) $< -o $@
-
-$(TGT): $(OBJ)
-	gcc -o $@ $^
+test: default
+	cd build && ctest --rerun-failed --output-on-failure
 
 clean:
-	$(CLEANUP) $(PATHB)*.o
-	$(CLEANUP) $(TGT)
-
-$(PATHB):
-	$(MKDIR) $(PATHB)
-
-all: clean test
-
-.PHONY: all
-.PHONY: clean
-.PHONY: test
+	rm -rf build
+	make --directory lib/common clean
