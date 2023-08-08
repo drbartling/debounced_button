@@ -22,7 +22,7 @@ jobs:
         - default
         include:
         - {os: windows-latest, compiler: gcc, generator: Ninja}
-        # - {os: windows-latest, compiler: msvc, generator: default}
+        - {os: windows-latest, compiler: msvc, generator: default}
     steps:
     - name: Check out repository
       uses: actions/checkout@v3

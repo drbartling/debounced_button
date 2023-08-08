@@ -24,7 +24,6 @@ endif()
 
 add_library(${PROJECT_NAME} src/debounced_button.c)
 target_include_directories(${PROJECT_NAME} PUBLIC src)
-# target_link_libraries(${PROJECT_NAME} PUBLIC c_static_asserts)
 
 if(${PROJECT_NAME}_ENABLE_TESTING)
     add_executable(${PROJECT_NAME}_tests test/test_debounced_button.cpp)
@@ -32,13 +31,6 @@ if(${PROJECT_NAME}_ENABLE_TESTING)
         ${PROJECT_NAME}_tests Catch2::Catch2WithMain ${PROJECT_NAME}
     )
     target_compile_features(${PROJECT_NAME}_tests PRIVATE cxx_std_17)
-    target_compile_options(
-        ${PROJECT_NAME}_tests
-        PRIVATE "-g"
-                "-gdwarf-4"
-                "-Wno-c99-designator"
-                "-Wno-extern-c-compat"
-    )
 
     # ---- Enable testing ----
 
