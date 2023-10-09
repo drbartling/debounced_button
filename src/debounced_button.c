@@ -20,8 +20,8 @@
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ *all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -32,66 +32,40 @@
  * SOFTWARE.
  ******************************************************************************/
 
-//
-// Section: Included Files
-//
-
-// TODO: Update header file
 #include "debounced_button.h"
+#include <assert.h>
 #include <stdbool.h>
 #include <stdint.h>
-#include <assert.h>
 
-//
-// Section: Debounced Button API
-//
-
-BUTTON_STATE_T BUTTON_Debounce(uint8_t reading, BUTTON_T *button) {
+BUTTON_STATE_T
+BUTTON_Debounce(uint8_t reading, BUTTON_T *button)
+{
     reading = reading ? 1U : 0U;
-    button->debounce <<= 1U;
-    button->debounce |= reading;
-    switch (button->state) {
-        case BUTTON_LOW:
-            if (0xFFU == button->debounce) {
-                button->state = BUTTON_HIGH;
-                button->edge = EDGE_RISING;
-            } else {
-                button->edge = EDGE_NONE;
-            }
-            break;
-        case BUTTON_HIGH:
-            if (0x00U == button->debounce) {
-                button->state = BUTTON_LOW;
-                button->edge = EDGE_FALLING;
-            } else {
-                button->edge = EDGE_NONE;
-            }
-            break;
-        case BUTTON_INITIALIZED:
-            switch (button->debounce) {
-                case 0x00U:
-                    button->state = BUTTON_LOW;
-                    break;
-                case 0xFFU:
-                    button->state = BUTTON_HIGH;
-                    break;
-                default:
-                    break;
-            }
-            break;
-        default:
-            button->state = BUTTON_ERROR;
-            break;
+
+    if (reading == button->state) {
+        button->debounce_count = 0;
+    } else {
+        button->debounce_count++;
+    }
+
+    if (button->debounce_count == button->debounce_limit) {
+        button->edge =
+            button->state == BUTTON_INITIALIZED ? EDGE_NONE : reading;
+        button->state          = reading;
+        button->debounce_count = 0;
+    } else if (button->debounce_count < button->debounce_limit) {
+        button->edge = EDGE_NONE;
+    } else {
+        button->state = BUTTON_ERROR;
     }
     return button->state;
 }
 
-void BUTTON_Initialize(BUTTON_T *button) {
-    button->debounce = 0x55U;
-    button->state = BUTTON_INITIALIZED;
-    button->edge = EDGE_NONE;
+void
+BUTTON_Initialize(BUTTON_T *button, int debounce_limit)
+{
+    button->debounce_count = 0;
+    button->debounce_limit = debounce_limit;
+    button->state          = BUTTON_INITIALIZED;
+    button->edge           = EDGE_NONE;
 }
-
-//
-// End of File
-//

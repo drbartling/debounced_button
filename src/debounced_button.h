@@ -64,8 +64,9 @@ typedef enum {
 /**
  * Structure for button object used by API functions.
  */
-typedef struct {
-    uint8_t        debounce;
+typedef struct BUTTON_S {
+    int            debounce_count;
+    int            debounce_limit;
     BUTTON_STATE_T state;
     BUTTON_EDGE_T  edge;
 } BUTTON_T;
@@ -82,8 +83,10 @@ BUTTON_STATE_T BUTTON_Debounce(uint8_t reading, BUTTON_T *button);
 /**
  * Initializes a button.  Initial state is not pressed or released.
  * @param button object to initialize.
+ * @param debounce_limit Number of consecutive identical samples required to
+ * change state
  */
-void BUTTON_Initialize(BUTTON_T *button);
+void BUTTON_Initialize(BUTTON_T *button, int debounce_limit);
 
 #ifdef __cplusplus
 }

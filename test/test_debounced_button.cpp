@@ -11,14 +11,14 @@ SCENARIO("Initial behavior", "[debounce]")
     BUTTON_T test_button;
     GIVEN("An initialized button")
     {
-        BUTTON_Initialize(&test_button);
+        BUTTON_Initialize(&test_button, 8);
         THEN("The button should not be pressed")
         {
             REQUIRE(BUTTON_INITIALIZED == test_button.state);
         }
-        THEN("Debounce starts as 0x55")
+        THEN("Debounce starts as 0")
         {
-            REQUIRE(0x55 == test_button.debounce);
+            REQUIRE(0 == test_button.debounce_count);
         }
         WHEN("The button is pressed")
         {
@@ -51,11 +51,16 @@ SCENARIO("Initial behavior", "[debounce]")
 SCENARIO("State Transitions", "[debounce]")
 {
     BUTTON_T test_button;
-    BUTTON_Initialize(&test_button);
+    BUTTON_Initialize(&test_button, 8);
     GIVEN("A pressed button")
     {
         for (int i = 0; i < 8; i++) {
             BUTTON_Debounce(IO_PRESSED, &test_button);
+        }
+        THEN("There is no edge")
+        {
+            CHECK(IO_PRESSED == test_button.state);
+            REQUIRE(EDGE_NONE == test_button.edge);
         }
         WHEN("The button is released")
         {
@@ -100,6 +105,11 @@ SCENARIO("State Transitions", "[debounce]")
     {
         for (int i = 0; i < 8; i++) {
             BUTTON_Debounce(IO_RELEASED, &test_button);
+        }
+        THEN("There is no edge")
+        {
+            CHECK(IO_RELEASED == test_button.state);
+            REQUIRE(EDGE_NONE == test_button.edge);
         }
         WHEN("The button is pressed")
         {
