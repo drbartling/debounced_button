@@ -59,3 +59,10 @@ jobs:
       working-directory: ./build
       run: |
         OpenCppCoverage.exe --export_type cobertura:coverage.xml --cover_children -- ctest -C ${{matrix.build_type}}
+
+    - name: Publish to codecov
+      uses: codecov/codecov-action@v2
+      with:
+        flags: ${{ runner.os }}
+        name: ${{ runner.os }}-coverage
+        files: ./build/coverage.xml
