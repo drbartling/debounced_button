@@ -1,3 +1,8 @@
+default:
+  just --list
+
+alias ccmake := configure-cmake
+
 build: configure-cmake
 	cmake --build build
 
