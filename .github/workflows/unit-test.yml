@@ -40,4 +40,4 @@ jobs:
       if: matrix.generator != 'default'
       run: echo "CMAKE_GENERATOR=${{matrix.generator}}" >> $GITHUB_ENV
     - name: Build Targets
-      run: make test
+      run: just test

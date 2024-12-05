@@ -1,11 +1,10 @@
-.PHONY: default
-default: build
+build: configure-cmake
 	cmake --build build
 
-build:
+configure-cmake:
 	cmake -S . -B build
 
-test: default
+test: build
 	cd build && ctest --rerun-failed --output-on-failure
 
 clean:

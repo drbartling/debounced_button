@@ -41,8 +41,8 @@ repos:
   - id: unit-test
     name: unit tests
     description: Run unit tests.
-    entry: make test
+    entry: just test
     language: system
-    types: [c, c++]
+    types_or: [c++, c, toml, cmake]
     pass_filenames: false
     stages: [commit]
