@@ -40,10 +40,5 @@ jobs:
         cppcheck: true
         gcovr: true
         opencppcoverage: true
-
-    - name: Configure CMake
-      run: |
-        cmake -S . -B ./build -G "${{matrix.generator}}"
-
     - name: Build Targets
-      run: just test
+      run: just ccmake test
