@@ -20,6 +20,8 @@ jobs:
         - llvm
         generator:
         - default
+        build_type:
+        - Debug
         include:
         - {os: windows-latest, compiler: gcc, generator: Ninja}
         - {os: windows-latest, compiler: msvc, generator: default}
