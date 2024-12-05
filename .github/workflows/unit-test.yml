@@ -26,18 +26,23 @@ jobs:
     steps:
     - name: Check out repository
       uses: actions/checkout@v3
-    - name: setup gcc
-      if: matrix.compiler == 'gcc'
+    - name: Setup Cpp
+      uses: aminya/setup-cpp@v1
+      with:
+        compiler: ${{ matrix.compiler }}
+        vcvarsall: ${{ contains(matrix.os, 'windows' )}}
+        cmake: true
+        ninja: true
+        vcpkg: true
+        ccache: true
+        clangtidy: true
+        cppcheck: true
+        gcovr: true
+        opencppcoverage: true
+
+    - name: Configure CMake
       run: |
-        echo "CC=gcc" >> $GITHUB_ENV
-        echo "CXX=g++" >> $GITHUB_ENV
-    - name: setup clang
-      if: matrix.compiler == 'llvm'
-      run: |
-        echo "CC=clang" >> $GITHUB_ENV
-        echo "CXX=clang++" >> $GITHUB_ENV
-    - name: Set non-default generator
-      if: matrix.generator != 'default'
-      run: echo "CMAKE_GENERATOR=${{matrix.generator}}" >> $GITHUB_ENV
+        cmake -S . -B ./build -G "${{matrix.generator}}" -D${{ env.PROJECT_NAME }}_ENABLE_IPO=${{matrix.enable_ipo }} -DCMAKE_BUILD_TYPE:STRING=${{matrix.build_type}} -D${{ env.PROJECT_NAME }}_PACKAGING_MAINTAINER_MODE:BOOL=${{matrix.packaging_maintainer_mode}} -D${{ env.PROJECT_NAME }}_ENABLE_COVERAGE:BOOL=${{ matrix.build_type == 'Debug' }} -DGIT_SHA:STRING=${{ github.sha }}
+
     - name: Build Targets
       run: just test
