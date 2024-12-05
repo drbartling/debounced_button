@@ -43,11 +43,7 @@ jobs:
 
     - name: Configure CMake
       run: |
-        cmake -S . -B ./build -G "${{matrix.generator}}" \
-          -DCMAKE_BUILD_TYPE:STRING=${{matrix.build_type}} \
-          -D${{ env.PROJECT_NAME }}_PACKAGING_MAINTAINER_MODE:BOOL=${{matrix.packaging_maintainer_mode}} \
-          -D${{ env.PROJECT_NAME }}_ENABLE_COVERAGE:BOOL=true \
-          -DGIT_SHA:STRING=${{ github.sha }}
+        cmake -S . -B ./build -G "${{matrix.generator}}"
 
     - name: Build Targets
       run: just test
