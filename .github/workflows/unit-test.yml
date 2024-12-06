@@ -22,6 +22,7 @@ jobs:
         - default
         build_type:
         - Debug
+        - Release
         include:
         - {os: windows-latest, build_type: Debug, compiler: gcc, generator: Ninja}
         - {os: windows-latest, build_type: Debug, compiler: msvc, generator: default}
@@ -43,7 +44,7 @@ jobs:
         gcovr: true
         opencppcoverage: true
     - name: Build Targets
-      run: just ccmake test
+      run: just test
 
     - name: Unix - Test and coverage
       if: runner.os != 'Windows'

@@ -5,8 +5,8 @@ project(debounced_button LANGUAGES CXX C)
 # ---- Dependencies ----
 
 include(cmake/CPM.cmake)
-include(cmake/dependencies.cmake)
 include(cmake/project_options.cmake)
+include(cmake/dependencies.cmake)
 
 # ---- Create binary ----
 

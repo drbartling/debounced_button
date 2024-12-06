@@ -1,5 +1,5 @@
 default:
-  just --list
+    just --list
 
 
 build:
@@ -8,16 +8,18 @@ build:
 alias cdebug := configure-debug
 configure-debug:
     cmake -S . -B build -G Ninja \
-        -DCMAKE_BUILD_TYPE=Debug \
-        -DFEATURE_TESTS=ON
+        -DCMAKE_BUILD_TYPE=Debug
 
 alias crelease := configure-release
 configure-release:
     cmake -S . -B build -G Ninja \
-        -DCMAKE_BUILD_TYPE=Release \
-        -DFEATURE_TESTS=ON
+        -DCMAKE_BUILD_TYPE=Release
 
-test: build
+enable-tests:
+    {{ if "true" == path_exists("build") {""} else {"just cdebug"} }}
+    cmake build -DFEATURE_TESTS=ON
+
+test: enable-tests build
     cd build && \
         ctest --rerun-failed --output-on-failure
     gcovr
