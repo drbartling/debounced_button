@@ -1,36 +1,25 @@
 cmake_minimum_required(VERSION 3.22 FATAL_ERROR)
 
-project(debounced_button)
-
-# ---= Build Configurations ----
-if(NOT DEFINED ${PROJECT_NAME}_ENABLE_TESTING)
-    set(${PROJECT_NAME}_ENABLE_TESTING
-        ${debounced_button_IS_TOP_LEVEL}
-        CACHE BOOL "Build tests for ${PROJECT_NAME}"
-    )
-endif()
+project(debounced_button LANGUAGES CXX C)
 
 # ---- Dependencies ----
 
 include(cmake/CPM.cmake)
-
-if(${PROJECT_NAME}_ENABLE_TESTING)
-    if(NOT TARGET Catch)
-        cpmaddpackage("gh:catchorg/Catch2@3.3.2")
-    endif()
-endif()
+include(cmake/dependencies.cmake)
+include(cmake/project_options.cmake)
 
 # ---- Create binary ----
 
 add_library(${PROJECT_NAME} src/debounced_button.c)
-target_include_directories(${PROJECT_NAME} PUBLIC src)
+target_include_directories(${PROJECT_NAME} PUBLIC include)
+target_include_directories(${PROJECT_NAME} PRIVATE src)
+target_link_libraries(${PROJECT_NAME} PRIVATE project_options project_warnings)
 
-if(${PROJECT_NAME}_ENABLE_TESTING)
+if(FEATURE_TESTS)
     add_executable(${PROJECT_NAME}_tests test/test_debounced_button.cpp)
     target_link_libraries(
         ${PROJECT_NAME}_tests Catch2::Catch2WithMain ${PROJECT_NAME}
     )
-    target_compile_features(${PROJECT_NAME}_tests PRIVATE cxx_std_17)
 
     # ---- Enable testing ----
 
