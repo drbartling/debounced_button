@@ -48,15 +48,15 @@ BUTTON_Debounce(uint8_t reading, BUTTON_T *button)
         button->debounce_count++;
     }
 
+    assert(button->debounce_count <= button->debounce_limit);
+
     if (button->debounce_count == button->debounce_limit) {
         button->edge =
             button->state == BUTTON_INITIALIZED ? EDGE_NONE : reading;
         button->state          = reading;
         button->debounce_count = 0;
-    } else if (button->debounce_count < button->debounce_limit) {
-        button->edge = EDGE_NONE;
     } else {
-        button->state = BUTTON_ERROR;
+        button->edge = EDGE_NONE;
     }
     return button->state;
 }
