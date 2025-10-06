@@ -27,6 +27,19 @@ if(FEATURE_TESTS)
         ${PROJECT_NAME}_tests Catch2::Catch2WithMain ${PROJECT_NAME}
     )
 
+    # ---- Windows-specific console application configuration ----
+    if(WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        set_target_properties(
+            ${PROJECT_NAME}_tests PROPERTIES WIN32_EXECUTABLE FALSE
+        )
+        target_link_options(
+            ${PROJECT_NAME}_tests
+            PRIVATE
+            -Wl,--subsystem,console
+            -Wl,-e,mainCRTStartup
+        )
+    endif()
+
     # ---- Enable testing ----
 
     list(APPEND CMAKE_MODULE_PATH ${Catch2_SOURCE_DIR}/extras)
