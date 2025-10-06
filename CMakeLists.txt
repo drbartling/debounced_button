@@ -1,8 +1,14 @@
-cmake_minimum_required(VERSION 3.22 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.15...4.1 FATAL_ERROR)
 
-project(debounced_button LANGUAGES CXX C)
+# https://cliutils.gitlab.io/modern-cmake/chapters/intro/installing.html
+# PIPx might be one of the easiest ways to keep cmake up to date
+# https://pypi.org/project/cmake/
 
-# ---- Dependencies ----
+project(
+    debounced_button
+    DESCRIPTION "A simple debounce filter for button input"
+    LANGUAGES CXX C
+)
 
 include(cmake/CPM.cmake)
 include(cmake/project_options.cmake)
