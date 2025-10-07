@@ -1,8 +1,14 @@
-cmake_minimum_required(VERSION 3.22 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.15...4.1 FATAL_ERROR)
 
-project(debounced_button LANGUAGES CXX C)
+# https://cliutils.gitlab.io/modern-cmake/chapters/intro/installing.html
+# PIPx might be one of the easiest ways to keep cmake up to date
+# https://pypi.org/project/cmake/
 
-# ---- Dependencies ----
+project(
+    debounced_button
+    DESCRIPTION "A simple debounce filter for button input"
+    LANGUAGES CXX C
+)
 
 include(cmake/CPM.cmake)
 include(cmake/project_options.cmake)
@@ -16,15 +22,36 @@ target_include_directories(${PROJECT_NAME} PRIVATE src)
 target_link_libraries(${PROJECT_NAME} PRIVATE project_options project_warnings)
 
 if(FEATURE_TESTS)
-    add_executable(${PROJECT_NAME}_tests test/test_debounced_button.cpp)
-    target_link_libraries(
-        ${PROJECT_NAME}_tests Catch2::Catch2WithMain ${PROJECT_NAME}
+    add_executable(
+        ${PROJECT_NAME}_tests test/main.cpp test/test_debounced_button.cpp
     )
+    target_link_libraries(${PROJECT_NAME}_tests Catch2::Catch2 ${PROJECT_NAME})
+
+    # ---- Windows-specific configuration ----
+    if(WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        # Set console application properties
+        set_target_properties(
+            ${PROJECT_NAME}_tests PROPERTIES WIN32_EXECUTABLE FALSE
+        )
+        # Add static linking to reduce DLL dependencies
+        target_link_options(
+            ${PROJECT_NAME}_tests
+            PRIVATE
+            -static-libgcc
+            -static-libstdc++
+        )
+    endif()
 
     # ---- Enable testing ----
 
     list(APPEND CMAKE_MODULE_PATH ${Catch2_SOURCE_DIR}/extras)
     include(CTest)
     include(Catch)
-    catch_discover_tests(${PROJECT_NAME}_tests)
+
+    # Windows GCC has runtime issues with test discovery, use simple test registration
+    if(WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        add_test(NAME ${PROJECT_NAME}_tests COMMAND ${PROJECT_NAME}_tests)
+    else()
+        catch_discover_tests(${PROJECT_NAME}_tests)
+    endif()
 endif()

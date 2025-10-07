@@ -3,6 +3,7 @@ default:
 
 
 build:
+    {{ if "true" == path_exists("build") {""} else {"just cdebug"} }}
     cmake --build build
 
 alias cdebug := configure-debug
