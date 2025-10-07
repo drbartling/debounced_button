@@ -59,6 +59,7 @@ typedef enum {
     EDGE_FALLING = 0, ///< Button state has transitioned from high to low
     EDGE_RISING  = 1, ///< Button state transitioned from low to high
     EDGE_NONE, ///< Button state did not change during last call to Debounce()
+    EDGE_INITIAL, ///< Button state transitioned out of the initialized state
 } BUTTON_EDGE_T;
 
 /**

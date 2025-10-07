@@ -57,10 +57,10 @@ SCENARIO("State Transitions", "[debounce]")
         for (int i = 0; i < 8; i++) {
             BUTTON_Debounce(IO_PRESSED, &test_button);
         }
-        THEN("There is no edge")
+        THEN("We have an initial edge")
         {
             CHECK(IO_PRESSED == test_button.state);
-            REQUIRE(EDGE_NONE == test_button.edge);
+            REQUIRE(EDGE_INITIAL == test_button.edge);
         }
         WHEN("The button is released")
         {
@@ -106,10 +106,10 @@ SCENARIO("State Transitions", "[debounce]")
         for (int i = 0; i < 8; i++) {
             BUTTON_Debounce(IO_RELEASED, &test_button);
         }
-        THEN("There is no edge")
+        THEN("We have an initial edge")
         {
             CHECK(IO_RELEASED == test_button.state);
-            REQUIRE(EDGE_NONE == test_button.edge);
+            REQUIRE(EDGE_INITIAL == test_button.edge);
         }
         WHEN("The button is pressed")
         {
