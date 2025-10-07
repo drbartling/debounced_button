@@ -35,31 +35,6 @@ jobs:
     steps:
     - name: Check out repository
       uses: actions/checkout@v5
-    - name: Cache CPM Dependencies
-      uses: actions/cache@v4
-      with:
-        path: |
-          ~/.cache/CPM
-          ~/AppData/Local/CPM
-        key: cpm-${{ runner.os }}-${{ hashFiles('**/dependencies.cmake', '**/CMakeLists.txt') }}
-        restore-keys: |
-          cpm-${{ runner.os }}-
-
-    - name: Cache Build and Tools
-      uses: actions/cache@v4
-      with:
-        path: |
-          ./build/
-          ~/.cache/ccache
-          ~/.ccache
-          ~/.config/ccache
-          ~/Library/Caches/ccache
-          ${{ env.LOCALAPPDATA }}/ccache
-          ${{ env.XDG_CACHE_HOME }}/ccache
-        key: ${{ runner.os }}-${{ matrix.compiler }}-${{ matrix.build_type }}-${{ hashFiles('**/CMakeLists.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-${{ matrix.compiler }}-${{ matrix.build_type }}-
-          ${{ runner.os }}-${{ matrix.compiler }}-
     - uses: extractions/setup-just@v2
     - name: Setup Cpp
       uses: aminya/setup-cpp@v1
