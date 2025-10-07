@@ -19,7 +19,6 @@ include(cmake/dependencies.cmake)
 add_library(${PROJECT_NAME} src/debounced_button.c)
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 target_include_directories(${PROJECT_NAME} PRIVATE src)
-target_link_libraries(${PROJECT_NAME} PRIVATE)
 
 if(FEATURE_TESTS)
     add_executable(
