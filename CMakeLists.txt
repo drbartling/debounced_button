@@ -12,12 +12,17 @@ project(
 
 include(cmake/CPM.cmake)
 include(cmake/dependencies.cmake)
+include(cmake/project_options.cmake)
 
 # ---- Create binary ----
 
 add_library(${PROJECT_NAME} src/debounced_button.c)
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 target_include_directories(${PROJECT_NAME} PRIVATE src)
+target_link_libraries(
+    ${PROJECT_NAME} debounced_button_project_options
+    debounced_button_project_warnings
+)
 
 if(DEBOUNCED_BUTTON_TESTS)
     add_executable(
