@@ -27,10 +27,31 @@ if(FEATURE_TESTS)
     )
     target_link_libraries(${PROJECT_NAME}_tests Catch2::Catch2 ${PROJECT_NAME})
 
+    # ---- Windows-specific configuration ----
+    if(WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        # Set console application properties
+        set_target_properties(
+            ${PROJECT_NAME}_tests PROPERTIES WIN32_EXECUTABLE FALSE
+        )
+        # Add static linking to reduce DLL dependencies
+        target_link_options(
+            ${PROJECT_NAME}_tests
+            PRIVATE
+            -static-libgcc
+            -static-libstdc++
+        )
+    endif()
+
     # ---- Enable testing ----
 
     list(APPEND CMAKE_MODULE_PATH ${Catch2_SOURCE_DIR}/extras)
     include(CTest)
     include(Catch)
-    catch_discover_tests(${PROJECT_NAME}_tests)
+
+    # Windows GCC has runtime issues with test discovery, use simple test registration
+    if(WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        add_test(NAME ${PROJECT_NAME}_tests COMMAND ${PROJECT_NAME}_tests)
+    else()
+        catch_discover_tests(${PROJECT_NAME}_tests)
+    endif()
 endif()
