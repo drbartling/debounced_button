@@ -18,7 +18,7 @@ configure-release:
 
 enable-tests:
     {{ if "true" == path_exists("build") {""} else {"just cdebug"} }}
-    cmake build -DFEATURE_TESTS=ON
+    cmake build -DDEBOUNCED_BUTTON_TESTS=ON
 
 test: enable-tests build
     cd build && \

@@ -19,7 +19,7 @@ add_library(${PROJECT_NAME} src/debounced_button.c)
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 target_include_directories(${PROJECT_NAME} PRIVATE src)
 
-if(FEATURE_TESTS)
+if(DEBOUNCED_BUTTON_TESTS)
     add_executable(
         ${PROJECT_NAME}_tests test/main.cpp test/test_debounced_button.cpp
     )
