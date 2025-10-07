@@ -22,23 +22,10 @@ target_include_directories(${PROJECT_NAME} PRIVATE src)
 target_link_libraries(${PROJECT_NAME} PRIVATE project_options project_warnings)
 
 if(FEATURE_TESTS)
-    add_executable(${PROJECT_NAME}_tests test/test_debounced_button.cpp)
-    target_link_libraries(
-        ${PROJECT_NAME}_tests Catch2::Catch2WithMain ${PROJECT_NAME}
+    add_executable(
+        ${PROJECT_NAME}_tests test/main.cpp test/test_debounced_button.cpp
     )
-
-    # ---- Windows-specific console application configuration ----
-    if(WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-        set_target_properties(
-            ${PROJECT_NAME}_tests PROPERTIES WIN32_EXECUTABLE FALSE
-        )
-        target_link_options(
-            ${PROJECT_NAME}_tests
-            PRIVATE
-            -Wl,--subsystem,console
-            -Wl,-e,mainCRTStartup
-        )
-    endif()
+    target_link_libraries(${PROJECT_NAME}_tests Catch2::Catch2 ${PROJECT_NAME})
 
     # ---- Enable testing ----
 
