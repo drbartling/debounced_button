@@ -11,7 +11,6 @@ project(
 )
 
 include(cmake/CPM.cmake)
-include(cmake/project_options.cmake)
 include(cmake/dependencies.cmake)
 
 # ---- Create binary ----
@@ -24,13 +23,7 @@ if(FEATURE_TESTS)
     add_executable(
         ${PROJECT_NAME}_tests test/main.cpp test/test_debounced_button.cpp
     )
-    target_link_libraries(
-        ${PROJECT_NAME}_tests
-        Catch2::Catch2
-        ${PROJECT_NAME}
-        project_options
-        project_warnings
-    )
+    target_link_libraries(${PROJECT_NAME}_tests Catch2::Catch2 ${PROJECT_NAME})
 
     # ---- Windows-specific configuration ----
     if(WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
