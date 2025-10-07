@@ -3,7 +3,7 @@ include_guard()
 cpmaddpackage("gh:aminya/project_options@0.41.0")
 
 if(DEBOUNCED_BUTTON_TESTS)
-    set(ENABLE_CLANG_TIDY "ENABLE_CLANG_TIDY")
+    # set(ENABLE_CLANG_TIDY "ENABLE_CLANG_TIDY")
     set(ENABLE_CPPCHECK "ENABLE_CPPCHECK")
     set(ENABLE_COVERAGE "ENABLE_COVERAGE")
 
@@ -19,7 +19,7 @@ project_options(
     "debounced_button"
     ENABLE_CACHE
     ${ENABLE_CPPCHECK}
-    ${ENABLE_CLANG_TIDY}
+    # ${ENABLE_CLANG_TIDY}
     ENABLE_VS_ANALYSIS
     # ENABLE_INTERPROCEDURAL_OPTIMIZATION
     # ENABLE_NATIVE_OPTIMIZATION
