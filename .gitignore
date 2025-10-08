@@ -87,6 +87,7 @@ test_button_nb
 test_button.X
 
 build/
+coverage/
 *-build-*/
 .idea/
 .cache/
