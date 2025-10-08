@@ -35,25 +35,6 @@ jobs:
     steps:
     - name: Check out repository
       uses: actions/checkout@v5
-    - name: Cache
-      uses: actions/cache@v4
-      with:
-        path: |
-          ./build/
-          ~/vcpkg
-          ~/.cache/vcpkg/archives
-          ${{ env.LOCALAPPDATA }}/vcpkg/archives
-          ${{ env.APPDATA }}/vcpkg/archives
-          ${{ env.XDG_CACHE_HOME }}/vcpkg/archives
-          ~/.cache/ccache
-          ~/.ccache
-          ~/.config/ccache
-          ~/Library/Caches/ccache
-          ${{ env.LOCALAPPDATA }}/ccache
-          ${{ env.XDG_CACHE_HOME }}/ccache
-        key: ${{ runner.os }}-${{ matrix.compiler }}-${{ env.BUILD_TYPE }}-${{ hashFiles('**/CMakeLists.txt', './vcpkg.json') }}
-        restore-keys: |
-          ${{ runner.os }}-${{ env.BUILD_TYPE }}-
     - uses: extractions/setup-just@v2
     - name: Setup Cpp
       uses: aminya/setup-cpp@v1
@@ -71,7 +52,6 @@ jobs:
         opencppcoverage: true
         python: true
         task: true
-        vcpkg: true
     - name: Configure CMAKE
       run: cmake -S . -B build -G "${{matrix.generator}}" -DCMAKE_BUILD_TYPE=${{matrix.build_type}} -DDEBOUNCED_BUTTON_TESTS=ON
     - name: Build
