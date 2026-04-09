@@ -151,3 +151,54 @@ SCENARIO("State Transitions", "[debounce]")
         }
     }
 }
+
+SCENARIO("No Debouncing", "[debounce]")
+{
+    BUTTON_T test_button;
+    BUTTON_Initialize(&test_button, 1);
+    GIVEN("A pressed button")
+    {
+        BUTTON_Debounce(IO_PRESSED, &test_button);
+        THEN("We have an initial edge")
+        {
+            CHECK(IO_PRESSED == test_button.state);
+            REQUIRE(EDGE_INITIAL == test_button.edge);
+        }
+        WHEN("The button is released")
+        {
+            BUTTON_Debounce(IO_RELEASED, &test_button);
+            THEN("The state changes to released")
+            {
+                REQUIRE(IO_RELEASED == test_button.state);
+            }
+            THEN("The edge changes to released")
+            {
+                REQUIRE(IO_RELEASED == test_button.edge);
+            }
+            WHEN("The button remains released")
+            {
+                BUTTON_Debounce(IO_RELEASED, &test_button);
+                THEN("The state stays released")
+                {
+                    REQUIRE(IO_RELEASED == test_button.state);
+                }
+                THEN("The edge changes to none")
+                {
+                    REQUIRE(EDGE_NONE == test_button.edge);
+                }
+            }
+            WHEN("The button first switches to pressed")
+            {
+                BUTTON_Debounce(IO_PRESSED, &test_button);
+                THEN("The state changes to pressed")
+                {
+                    REQUIRE(IO_PRESSED == test_button.state);
+                }
+                THEN("The edge changes to pressed")
+                {
+                    REQUIRE(IO_PRESSED == test_button.edge);
+                }
+            }
+        }
+    }
+}
