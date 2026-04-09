@@ -322,12 +322,17 @@ readings is always required before a transition is accepted.
 
 ## Edge Value Reference
 
-| Edge value     | Meaning                                                                       |
-|----------------|-------------------------------------------------------------------------------|
-| `EDGE_INITIAL` | First latch out of `BUTTON_INITIALIZED` (button state was never known before) |
-| `EDGE_RISING`  | State transitioned LOW → HIGH (button released on an active-low circuit)      |
-| `EDGE_FALLING` | State transitioned HIGH → LOW (button pressed on an active-low circuit)       |
-| `EDGE_NONE`    | No transition this tick; set on every call that does not produce a latch      |
+```typst
+#table(
+  columns: (auto, 1fr),
+  align: (left, left),
+  table.header([*Edge value*], [*Meaning*]),
+  [`EDGE_INITIAL`], [First latch out of `BUTTON_INITIALIZED` (button state was never known before)],
+  [`EDGE_RISING`],  [State transitioned LOW → HIGH (button released on an active-low circuit)],
+  [`EDGE_FALLING`], [State transitioned HIGH → LOW (button pressed on an active-low circuit)],
+  [`EDGE_NONE`],    [No transition this tick; set on every call that does not produce a latch],
+)
+```
 
 > **Note:** An edge value is valid for exactly one call to `BUTTON_Debounce()`. On the
 > very next call, if the reading still matches the new state, `debounce_count` stays 0
