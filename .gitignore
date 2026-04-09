@@ -91,3 +91,7 @@ coverage/
 *-build-*/
 .idea/
 .cache/
+
+# Doc generation folders
+temp/
+output/
