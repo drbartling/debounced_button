@@ -23,7 +23,7 @@ enable-tests:
 test: enable-tests build
     cd build && \
         ctest --rerun-failed --output-on-failure
-    mkdir coverage
+    mkdir -p coverage
     gcovr
 
 clean:
