@@ -23,7 +23,7 @@ SCENARIO("Initial behavior", "[debounce]")
         WHEN("The button is pressed")
         {
             for (int i = 0; i < 8; i++) {
-                BUTTON_Debounce(IO_PRESSED, &test_button);
+                BUTTON_Debounce(&test_button, IO_PRESSED);
             }
             THEN("The state goes low")
             {
@@ -32,13 +32,13 @@ SCENARIO("Initial behavior", "[debounce]")
             THEN("The current state is returned from the debounce function")
             {
                 REQUIRE(IO_PRESSED
-                        == BUTTON_Debounce(IO_PRESSED, &test_button));
+                        == BUTTON_Debounce(&test_button, IO_PRESSED));
             }
         }
         WHEN("The button is released")
         {
             for (int i = 0; i < 8; i++) {
-                BUTTON_Debounce(IO_RELEASED, &test_button);
+                BUTTON_Debounce(&test_button, IO_RELEASED);
             }
             THEN("The state goes low")
             {
@@ -55,7 +55,7 @@ SCENARIO("State Transitions", "[debounce]")
     GIVEN("A pressed button")
     {
         for (int i = 0; i < 8; i++) {
-            BUTTON_Debounce(IO_PRESSED, &test_button);
+            BUTTON_Debounce(&test_button, IO_PRESSED);
         }
         THEN("We have an initial edge")
         {
@@ -65,7 +65,7 @@ SCENARIO("State Transitions", "[debounce]")
         WHEN("The button is released")
         {
             for (int i = 0; i < 8; i++) {
-                BUTTON_Debounce(IO_RELEASED, &test_button);
+                BUTTON_Debounce(&test_button, IO_RELEASED);
             }
             THEN("The state changes to released")
             {
@@ -77,7 +77,7 @@ SCENARIO("State Transitions", "[debounce]")
             }
             WHEN("The button remains released")
             {
-                BUTTON_Debounce(IO_RELEASED, &test_button);
+                BUTTON_Debounce(&test_button, IO_RELEASED);
                 THEN("The state stays released")
                 {
                     REQUIRE(IO_RELEASED == test_button.state);
@@ -89,7 +89,7 @@ SCENARIO("State Transitions", "[debounce]")
             }
             WHEN("The button first switches to pressed")
             {
-                BUTTON_Debounce(IO_PRESSED, &test_button);
+                BUTTON_Debounce(&test_button, IO_PRESSED);
                 THEN("The state stays released")
                 {
                     REQUIRE(IO_RELEASED == test_button.state);
@@ -104,7 +104,7 @@ SCENARIO("State Transitions", "[debounce]")
     GIVEN("A released button")
     {
         for (int i = 0; i < 8; i++) {
-            BUTTON_Debounce(IO_RELEASED, &test_button);
+            BUTTON_Debounce(&test_button, IO_RELEASED);
         }
         THEN("We have an initial edge")
         {
@@ -114,7 +114,7 @@ SCENARIO("State Transitions", "[debounce]")
         WHEN("The button is pressed")
         {
             for (int i = 0; i < 8; i++) {
-                BUTTON_Debounce(IO_PRESSED, &test_button);
+                BUTTON_Debounce(&test_button, IO_PRESSED);
             }
             THEN("The state changes to pressed")
             {
@@ -126,7 +126,7 @@ SCENARIO("State Transitions", "[debounce]")
             }
             WHEN("The button remains pressed")
             {
-                BUTTON_Debounce(IO_PRESSED, &test_button);
+                BUTTON_Debounce(&test_button, IO_PRESSED);
                 THEN("The state stays pressed")
                 {
                     REQUIRE(IO_PRESSED == test_button.state);
@@ -138,7 +138,7 @@ SCENARIO("State Transitions", "[debounce]")
             }
             WHEN("The button first switches to released")
             {
-                BUTTON_Debounce(IO_RELEASED, &test_button);
+                BUTTON_Debounce(&test_button, IO_RELEASED);
                 THEN("The state stays released")
                 {
                     REQUIRE(IO_PRESSED == test_button.state);
@@ -158,7 +158,7 @@ SCENARIO("No Debouncing", "[debounce]")
     BUTTON_Initialize(&test_button, 1);
     GIVEN("A pressed button")
     {
-        BUTTON_Debounce(IO_PRESSED, &test_button);
+        BUTTON_Debounce(&test_button, IO_PRESSED);
         THEN("We have an initial edge")
         {
             CHECK(IO_PRESSED == test_button.state);
@@ -166,7 +166,7 @@ SCENARIO("No Debouncing", "[debounce]")
         }
         WHEN("The button is released")
         {
-            BUTTON_Debounce(IO_RELEASED, &test_button);
+            BUTTON_Debounce(&test_button, IO_RELEASED);
             THEN("The state changes to released")
             {
                 REQUIRE(IO_RELEASED == test_button.state);
@@ -177,7 +177,7 @@ SCENARIO("No Debouncing", "[debounce]")
             }
             WHEN("The button remains released")
             {
-                BUTTON_Debounce(IO_RELEASED, &test_button);
+                BUTTON_Debounce(&test_button, IO_RELEASED);
                 THEN("The state stays released")
                 {
                     REQUIRE(IO_RELEASED == test_button.state);
@@ -189,7 +189,7 @@ SCENARIO("No Debouncing", "[debounce]")
             }
             WHEN("The button first switches to pressed")
             {
-                BUTTON_Debounce(IO_PRESSED, &test_button);
+                BUTTON_Debounce(&test_button, IO_PRESSED);
                 THEN("The state changes to pressed")
                 {
                     REQUIRE(IO_PRESSED == test_button.state);
